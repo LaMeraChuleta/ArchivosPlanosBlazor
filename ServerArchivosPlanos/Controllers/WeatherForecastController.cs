@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Share.Data;
+using Share.Models.Context;
 
 namespace ServerArchivosPlanos.Controllers
 {
@@ -8,19 +11,22 @@ namespace ServerArchivosPlanos.Controllers
     {
         private static readonly string[] Summaries = new[]
         {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ProsisDBvContext _dBvContext;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, ProsisDBvContext dBvContext)
         {
             _logger = logger;
+            _dBvContext = dBvContext;
         }
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {                                  
+            string.IsNullOrEmpty("");          
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
@@ -29,11 +35,10 @@ namespace ServerArchivosPlanos.Controllers
             })
             .ToArray();
         }
-
         [HttpGet("delegation")]
-        public string GetDelegation()
-        {            
-            return "Acapulco";
+        public async Task<TypeDelegacion[]?> GetTypeDelegacion()
+        {
+           return await _dBvContext.TypeDelegacions.ToArrayAsync(); 
         }
 
     }

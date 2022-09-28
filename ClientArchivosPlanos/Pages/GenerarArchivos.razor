@@ -1,0 +1,58 @@
+@page "/generarArchivos"
+@using Share.Models.Context
+
+
+@inject HttpClient Http
+
+<PageTitle>Generar Archivos</PageTitle>
+
+<div class="container">
+    <h1>Generar Archivos Planos</h1>
+    <div>
+        <div class="m-3">
+            <label for="delegacion" class="form-label">Delegacion</label> 
+            @* <select @bind="IdDelegacion" @onchange="@((ChangeEventArgs __e) => IdDelegacion = __e?.Value?.toString())" class=" form-control" name="Delegacion" id="delegacion"> *@
+            <select @bind="IdDelegacion" class=" form-control" name="Delegacion" id="delegacion">
+                @if(!(delegations is null))
+                {
+                    foreach (var delegation in delegations)
+                    {
+                        <option value="@delegation.IdDelegacion">@delegation.NomDelegacion</option>
+                    }
+                }
+            </select>
+            <h1>@IdDelegacion</h1>
+        </div>
+        <div class="m-3">
+            <label for="plaza" class="form-label">Plaza</label>
+            <select class="form-control" name="Plaza" id="plaza"></select>
+        </div>
+        <div class="m-3">
+            <label for="turno" class="form-label">Turno</label>
+            <select class="form-control" name="Turno" id="turno"></select>
+        </div>
+        <div class="m-3">
+            <label for="fecha" class="form-label">Fecha</label>
+            <input class="form-control" type="date" name="Fecha" id="fecha">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary m-3">Generar Archivos</button>
+</div>
+
+
+
+@code {
+
+    private TypeDelegacion[]? delegations;
+    private int IdDelegacion = 110;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.delegations = await Http.GetFromJsonAsync<TypeDelegacion[]>("https://localhost:7038/WeatherForecast/delegation");             
+    }
+}
+
+
+
+
+

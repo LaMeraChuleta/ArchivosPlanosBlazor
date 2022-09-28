@@ -1,3 +1,5 @@
+using Share.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,6 +17,8 @@ builder.Services.AddCors(options =>
                           policy.WithOrigins("https://localhost:7118");
                       });
 });
+
+builder.Services.AddDbContext<ProsisDBvContext>();
 
 var app = builder.Build();
 app.UseCors(MyAllowSpecificOrigins);
